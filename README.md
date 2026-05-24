@@ -125,7 +125,7 @@ examples of adding popularly requested plugins.
 > [!NOTE]
 > For more information about a particular plugin check its repository's documentation.
 
-
+ 
 ### Getting Started
 
 [The Only Video You Need to Get Started with Neovim](https://youtu.be/m8C0Cq9Uv9o)
