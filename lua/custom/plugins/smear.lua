@@ -9,19 +9,23 @@ vim.cmd 'packadd smear-cursor.nvim'
 local ok_smear, smear = pcall(require, 'smear_cursor')
 if ok_smear then
   smear.setup {
-    cursor_color = 'none',
-    damping = 0.65,
-
-    stiffness = 0.7,
+    -- Bouncy & Flashy (Color Preserved)
+    stiffness = 0.5,
     trailing_stiffness = 0.4,
-    trailing_exponent = 4,
+    stiffness_insert_mode = 0.5,
+    trailing_stiffness_insert_mode = 0.5,
 
-    smear_between_buffers = true,
-    smear_between_neighbor_lines = true,
+    -- High-Bounciness (Increased Overshoot)
+    damping = 0.35,
+    damping_insert_mode = 0.35,
 
-    hide_target_hack = true,
-    particles_enabled = false,
-    max_slope_horizontal = 50,
+    -- High-Reactivity Polling
+    time_interval = 4,
+    distance_stop_animating = 0.1,
+
+    -- Original color with sharper decay for "flash" effect
+    cursor_color = '#ffd3ea',
+    trailing_exponent = 2, -- Lowered to keep the trail more visible/intense
   }
 end
 require('smear_cursor').enabled = true
