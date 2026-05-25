@@ -18,6 +18,9 @@ vim.keymap.set('n', '\\', '<Cmd>Neotree reveal<CR>', { desc = 'NeoTree reveal', 
 require('neo-tree').setup {
   sync_root_with_cwd = true,
   respect_buf_cwd = true,
+  highlights = {
+    NeoTreeWinSeparator = { fg = 'none', bg = 'none' },
+  },
   filesystem = {
     bind_to_cwd = true,
     follow_current_file = {
