@@ -4,7 +4,7 @@ vim.lsp.config('html', {})
 vim.lsp.config('cssls', {})
 vim.lsp.config('vtsls', {})
 vim.lsp.config('emmet_ls', {
-  filetypes = { 'html', 'css', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact' },
+  filetypes = { 'html', 'css' },
 })
 -- 2. Physically enable them to run on their respective file types
 vim.lsp.enable 'html'
