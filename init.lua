@@ -160,6 +160,18 @@ do
   vim.opt.fillchars = { vert = ' ', eob = ' ' }
   vim.api.nvim_set_hl(0, 'WinSeparator', { fg = 'none', bg = 'none' })
 
+  -- Use spaces instead of tabs.
+  vim.opt.expandtab = true
+
+  -- Set indent size to 4
+  vim.opt.shiftwidth = 4
+
+  -- Set visual tab width to 4
+  vim.opt.tabstop = 4
+
+  -- Makes backspace behave 4 spaces
+  vim.opt.softtabstop = 4
+
   -- Preview substitutions live, as you type!
   vim.o.inccommand = 'split'
 
