@@ -1,4 +1,4 @@
-local function gh(repo) return 'https://github.com/' .. repo end
+-- local function gh(repo) return 'https://github.com/' .. repo end
 -- File Explorer (Completely explicit list)
 vim.pack.add {
   'https://github.com/nvim-lua/plenary.nvim',
