@@ -980,14 +980,13 @@ do
   require 'kickstart.plugins.indent_line'
   require 'kickstart.plugins.lint'
   require 'kickstart.plugins.autopairs'
-  require 'kickstart.plugins.neo-tree'
   require 'kickstart.plugins.gitsigns' -- adds gitsigns recommended keymaps
 
   -- NOTE: You can add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   require 'custom.plugins.code'
-  require 'custom.plugins.file-explorer'
+  require 'custom.plugins.neotree'
   require 'custom.plugins.git'
   require 'custom.plugins.navigation'
   require 'custom.plugins.ui'
@@ -1002,6 +1001,7 @@ do
   require 'custom.plugins.numb'
   require 'custom.plugins.toggleterm'
   require 'custom.plugins.snippets'
+  require 'custom.plugins.whichkey'
 end
 
 -- The line beneath this is called `modeline`. See `:help modeline`
