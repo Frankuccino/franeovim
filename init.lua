@@ -159,7 +159,6 @@ do
   vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
   vim.opt.fillchars = { vert = ' ', eob = ' ' }
   vim.api.nvim_set_hl(0, 'WinSeparator', { fg = 'none', bg = 'none' })
-
   -- Use spaces instead of tabs.
   vim.opt.expandtab = true
 
@@ -996,6 +995,9 @@ do
   require 'custom.plugins.conform'
   require 'custom.plugins.rustaceanvim'
   require 'custom.plugins.move'
+  require 'custom.plugins.bufferline'
+  require 'custom.plugins.numb'
+  require 'custom.plugins.toggleterm'
 end
 
 -- The line beneath this is called `modeline`. See `:help modeline`
