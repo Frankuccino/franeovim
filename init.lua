@@ -995,6 +995,7 @@ do
   require 'custom.plugins.lsp'
   require 'custom.plugins.conform'
   require 'custom.plugins.rustaceanvim'
+  require 'custom.plugins.move'
 end
 
 -- The line beneath this is called `modeline`. See `:help modeline`
