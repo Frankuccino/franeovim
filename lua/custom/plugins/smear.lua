@@ -1,4 +1,4 @@
-local function gh(repo) return 'https://github.com/' .. repo end
+-- local function gh(repo) return 'https://github.com/' .. repo end
 
 -- Fix: Changed 'sphalerite' to the correct user 'sphamba'
 vim.pack.add {
