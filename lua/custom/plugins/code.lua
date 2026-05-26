@@ -1,28 +1,5 @@
 local function gh(repo) return 'https://github.com/' .. repo end
 
--- Treesitter - Syntax highlighting and code understanding
-vim.pack.add { gh 'nvim-treesitter/nvim-treesitter' }
-
-local ok, treesitter = pcall(require, 'nvim-treesitter.configs')
-if ok then
-  treesitter.setup {
-    ensure_installed = { 
-      'lua',
-      'javascript', 
-      'typescript', 
-      'tsx',
-      'jsx',
-      'html',
-      'css',
-      'json',
-    },
-    highlight = { enable = true },
-    indent = { enable = true },
-  }
-else
-  print('Treesitter is downloading...')
-end
-
 -- UFO (better folding)
 vim.pack.add {
   gh 'kevinhwang91/promise-async', -- Load the dependency first!
