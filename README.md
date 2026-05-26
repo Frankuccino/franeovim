@@ -240,6 +240,7 @@ Mason provides a graphical interface to install and manage LSP servers, DAP serv
 | `:checkhealth` | Run this to diagnose configuration or missing dependencies |
 | `:TSUpdate` | Update Treesitter parsers manually |
 | `:MasonUpdate` | Update the Mason package manager and its managed tools |
+| `:PluginsList` | To automatically generate the list of plugins in [INSTALLED_PLUGINS.md](./INSTALLED_PLUGINS.md) |
 
 ## 🚀 Getting Started
 
@@ -247,7 +248,8 @@ Mason provides a graphical interface to install and manage LSP servers, DAP serv
 
 - Neovim (v0.10+)
 - Ripgrep
-- Rust Toolchain
+- Rust Analyzer (via Mason, used in Rustaceanvim)
+- Treesitter-cli
 
 ### Installation
 
@@ -261,3 +263,166 @@ This setup is designed for **AI-native awareness**. It prioritizes:
 - High-density information displays
 - Fast navigation
 - Deep diagnostic capabilities for backend microservices
+
+
+<details>
+    <summary>
+# Installed Neovim Plugins
+    </summary>
+
+Generated on: [Date]
+
+---
+
+## 🎨 UI & Appearance
+
+- **folke/tokyonight.nvim** - Tokyo Night colorscheme
+- **nvim-tree/nvim-web-devicons** - File icons for neo-tree, telescope, etc.
+- **akinsho/bufferline.nvim** - Top buffer/tab line with beautiful UI
+- **j-hui/fidget.nvim** - LSP progress notifications (bottom right spinner)
+
+---
+
+## 🔍 Navigation & Search
+
+- **nvim-telescope/telescope.nvim** - Fuzzy finder for files, text, buffers (ESSENTIAL)
+- **nvim-telescope/telescope-fzf-native.nvim** - Faster fuzzy finding algorithm for Telescope
+- **nvim-telescope/telescope-ui-select.nvim** - Use Telescope for vim.ui.select (code actions, etc.)
+- **folke/flash.nvim** - Jump to any location with 2 keystrokes (like Leap/Hop)
+- **folke/which-key.nvim** - Popup showing available keybindings as you type
+- **nacro90/numb.nvim** - Peek line numbers when typing `:123` to jump
+
+---
+
+## 📝 Code Editing & Completion
+
+- **hrsh7th/nvim-cmp** - Completion engine (the main autocompletion UI)
+- **hrsh7th/cmp-nvim-lsp** - LSP completion source for nvim-cmp
+- **hrsh7th/cmp-buffer** - Buffer text completion source
+- **hrsh7th/cmp-path** - File path completion source
+- **saghen/blink.cmp** - Alternative modern completion engine (you have both?)
+- **L3MON4D3/LuaSnip** - Snippet engine (powers your React snippets)
+- **rafamadriz/friendly-snippets** - Collection of snippets for many languages
+- **saadparwaiz1/cmp_luasnip** - Bridge between nvim-cmp and LuaSnip
+- **windwp/nvim-autopairs** - Auto-close brackets, quotes, etc.
+- **windwp/nvim-ts-autotag** - Auto-close HTML/JSX tags
+- **smjonas/inc-rename.nvim** - Live preview when renaming variables
+- **echasnovski/mini.move** - Move lines/blocks up and down easily
+- **nvim-mini/mini.nvim** - Collection of minimal plugins (check which modules you use)
+
+---
+
+## 🌳 Treesitter (Syntax & Parsing)
+
+- **nvim-treesitter/nvim-treesitter** - Better syntax highlighting and code understanding
+- **NMAC427/guess-indent.nvim** - Auto-detect indent size (tabs vs spaces, 2 vs 4)
+
+---
+
+## 🔧 LSP & Language Support
+
+- **neovim/nvim-lspconfig** - LSP configuration helper
+- **mason-org/mason.nvim** - LSP/formatter/linter installer (UI for installing servers)
+- **mason-org/mason-lspconfig.nvim** - Bridge between mason and lspconfig
+- **WhoIsSethDaniel/mason-tool-installer.nvim** - Auto-install LSP servers/formatters
+- **mrcjkb/rustaceanvim** - Enhanced Rust tooling (rust-analyzer, cargo, etc.)
+
+---
+
+## ✨ Formatting & Linting
+
+- **stevearc/conform.nvim** - Formatter runner (Prettier, rustfmt, etc.)
+
+---
+
+## 🐙 Git Integration
+
+- **lewis6991/gitsigns.nvim** - Git changes in gutter, blame, hunk preview
+- **kdheepak/lazygit.nvim** - LazyGit integration (TUI for git)
+- **sindrets/diffview.nvim** - Beautiful diff viewer for git
+
+---
+
+## 🚨 Diagnostics & Errors
+
+- **folke/trouble.nvim** - Better diagnostics/error list UI
+- **folke/todo-comments.nvim** - Highlight TODO, FIXME, NOTE comments
+
+---
+
+## 🖥️ Terminal & Windows
+
+- **akinsho/toggleterm.nvim** - Toggle floating/split terminals
+- **kevinhwang91/nvim-ufo** - Better code folding with Treesitter
+- **kevinhwang91/promise-async** - Dependency for nvim-ufo
+
+---
+
+## 🛠️ Utilities
+
+- **nvim-lua/plenary.nvim** - Lua utility library (required by many plugins)
+
+---
+
+## ⚠️ Potential Duplicates/Issues
+
+- **L3MON4D3/LuaSnip** appears twice (lines with different version specs)
+- **nvim-treesitter/nvim-treesitter** appears twice
+- **saghen/blink.cmp** AND **hrsh7th/nvim-cmp** - You have TWO completion engines! (choose one)
+- **\\(.*\\)** - This looks like a regex artifact, not a real plugin
+
+---
+
+## 🧹 Cleanup Recommendations
+
+### Remove Duplicates:
+```lua
+-- Remove one of these (check your config for duplicate vim.pack.add calls):
+- L3MON4D3/LuaSnip (duplicate entry)
+- nvim-treesitter/nvim-treesitter (duplicate entry)
+```
+
+### Choose ONE Completion Engine:
+You have both `nvim-cmp` and `blink.cmp`. **Choose one:**
+
+**Option 1: Keep nvim-cmp** (more mature, widely used)
+- Remove: `saghen/blink.cmp`
+
+**Option 2: Keep blink.cmp** (newer, faster)
+- Remove: `hrsh7th/nvim-cmp`, `hrsh7th/cmp-nvim-lsp`, `hrsh7th/cmp-buffer`, `hrsh7th/cmp-path`, `saadparwaiz1/cmp_luasnip`
+
+**Recommendation:** Stick with **nvim-cmp** unless you specifically want to try blink.
+
+### Check mini.nvim:
+`mini.nvim` is a collection. Check which modules you're actually using:
+```lua
+:lua print(vim.inspect(require('mini')))
+```
+If you're using `mini.move` separately, you might not need the full `mini.nvim`.
+
+---
+
+## 📊 Summary
+
+- **Total Plugins:** ~35 (after removing duplicates)
+- **Duplicates Found:** 3
+- **Conflicts:** nvim-cmp vs blink.cmp
+- **Status:** Excellent, well-rounded setup! 🎉
+
+---
+
+## 🎯 Core Plugin Stack (Your Essentials)
+
+1. Telescope - Finding files/text
+2. nvim-cmp - Autocompletion
+3. Treesitter - Syntax
+4. LSP (mason + lspconfig) - Language intelligence
+5. Gitsigns - Git integration
+6. Conform - Formatting
+7. Bufferline - Buffer management
+8. ToggleTerm - Terminal
+9. Which-Key - Keybinding help
+10. LuaSnip - Snippets
+
+You have a **professional-grade setup**! 🚀
+</details>
