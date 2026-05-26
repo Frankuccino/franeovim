@@ -1,0 +1,44 @@
+- \\(.*\\)
+- akinsho/bufferline.nvim
+- akinsho/toggleterm.nvim
+- echasnovski/mini.move
+- folke/flash.nvim
+- folke/todo-comments.nvim
+- folke/tokyonight.nvim
+- folke/trouble.nvim
+- folke/which-key.nvim
+- hrsh7th/cmp-buffer
+- hrsh7th/cmp-nvim-lsp
+- hrsh7th/cmp-path
+- hrsh7th/nvim-cmp
+- j-hui/fidget.nvim
+- kdheepak/lazygit.nvim
+- kevinhwang91/nvim-ufo
+- kevinhwang91/promise-async
+- L3MON4D3/LuaSnip
+- L3MON4D3/LuaSnip', version = vim.version.range '2.*
+- lewis6991/gitsigns.nvim
+- mason-org/mason-lspconfig.nvim
+- mason-org/mason.nvim
+- mrcjkb/rustaceanvim
+- nacro90/numb.nvim
+- neovim/nvim-lspconfig
+- NMAC427/guess-indent.nvim
+- nvim-lua/plenary.nvim
+- nvim-mini/mini.nvim
+- nvim-telescope/telescope-file-browser.nvim
+- nvim-telescope/telescope-fzf-native.nvim
+- nvim-telescope/telescope-ui-select.nvim
+- nvim-telescope/telescope.nvim
+- nvim-tree/nvim-web-devicons
+- nvim-treesitter/nvim-treesitter
+- nvim-treesitter/nvim-treesitter', version = 'main
+- rafamadriz/friendly-snippets
+- saadparwaiz1/cmp_luasnip
+- saghen/blink.cmp', version = vim.version.range '1.*
+- sindrets/diffview.nvim
+- smjonas/inc-rename.nvim
+- stevearc/conform.nvim
+- WhoIsSethDaniel/mason-tool-installer.nvim
+- windwp/nvim-autopairs
+- windwp/nvim-ts-autotag
