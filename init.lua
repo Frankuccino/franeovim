@@ -491,6 +491,7 @@ do
     gh 'nvim-lua/plenary.nvim',
     gh 'nvim-telescope/telescope.nvim',
     gh 'nvim-telescope/telescope-ui-select.nvim',
+    gh 'nvim-telescope/telescope-file-browser.nvim',
   }
   if vim.fn.executable 'make' == 1 then table.insert(telescope_plugins, gh 'nvim-telescope/telescope-fzf-native.nvim') end
 
@@ -516,6 +517,7 @@ do
   -- Enable Telescope extensions if they are installed
   pcall(require('telescope').load_extension, 'fzf')
   pcall(require('telescope').load_extension, 'ui-select')
+  pcall(require('telescope').load_extension, 'file_browser') -- ADDED THIS for directory searching
 
   -- See `:help telescope.builtin`
   local builtin = require 'telescope.builtin'
@@ -529,7 +531,38 @@ do
   vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
   vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
   vim.keymap.set('n', '<leader>sc', builtin.commands, { desc = '[S]earch [C]ommands' })
-  vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
+  vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existng buffers' })
+
+  -- Enable Directory Searching via Telescope
+  vim.keymap.set('n', '<leader>sD', function()
+    require('telescope').extensions.file_browser.file_browser {
+      path = vim.fn.expand '~/dev',
+      select_buffer = true,
+      hidden = true,
+      display_stat = false,
+      grouped = true,
+      -- This block handles the "Enter" action
+      attach_mappings = function(prompt_bufnr, map)
+        local action_state = require 'telescope.actions.state'
+        local fb_actions = require 'telescope._extensions.file_browser.actions'
+
+        -- When you press <CR> (Enter)
+        map('i', '<cr>', function()
+          local entry = action_state.get_selected_entry()
+          -- If it's a directory, close telescope and open NeoTree at that path
+          if entry and entry.is_dir then
+            require('telescope.actions').close(prompt_bufnr)
+            -- Open NeoTree at the selected directory
+            require('neo-tree.command').execute { dir = entry.path, action = 'focus' }
+          else
+            -- If it's a file, just open it normally
+            fb_actions.change_cwd(prompt_bufnr)
+          end
+        end)
+        return true
+      end,
+    }
+  end, { desc = '[S]earch [D]irectory (dev) and Open Tree' })
 
   -- Add Telescope-based LSP pickers when an LSP attaches to a buffer.
   -- If you later switch picker plugins, this is where to update these mappings.
@@ -970,6 +1003,8 @@ do
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
   -- place them in the correct locations.
+  -- NOTE: Below will list my very own Custom Commands
+  require 'custom.commands'
 
   -- NOTE: Next step on your Neovim journey: Add/Configure additional plugins for Kickstart
   --
