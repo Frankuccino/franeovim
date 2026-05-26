@@ -28,32 +28,9 @@ end
 -- ==========================================
 -- Autocomplete & Auto-closing Tags Setup
 -- ==========================================
-vim.pack.add {
-  gh 'hrsh7th/nvim-cmp', -- The main completion UI engine
-  gh 'hrsh7th/cmp-nvim-lsp', -- Source: Feeds your 0.11 native LSP data to the UI
-  gh 'hrsh7th/cmp-buffer', -- Source: Grabs text from the current file
-  gh 'hrsh7th/cmp-path', -- Source: Real-time file paths explorer
-  gh 'windwp/nvim-ts-autotag', -- NEW: Automatically closes HTML/JS/TS tags instantly
-}
+-- ==========================================
+-- 🔌 Keep ONLY the auto-closing tags engine
+vim.pack.add { gh 'windwp/nvim-ts-autotag' }
 
--- Fire up the auto-closing tags engine
 local autotag_ok, autotag = pcall(require, 'nvim-ts-autotag')
 if autotag_ok then autotag.setup() end
-
--- Your existing safe execution block for cmp:
-local cmp_ok, cmp = pcall(require, 'cmp')
-if cmp_ok then
-  cmp.setup {
-    mapping = cmp.mapping.preset.insert {
-      ['<C-Space>'] = cmp.mapping.complete(),
-      ['<CR>'] = cmp.mapping.confirm { select = true },
-      ['<Tab>'] = cmp.mapping.select_next_item(),
-      ['<S-Tab>'] = cmp.mapping.select_prev_item(),
-    },
-    sources = cmp.config.sources {
-      { name = 'nvim_lsp' }, -- Now cleanly wired up through your lsp.lua capabilities!
-      { name = 'buffer' },
-      { name = 'path' },
-    },
-  }
-end

@@ -1,4 +1,4 @@
---[[
+-
 
 =====================================================================
 ==================== READ THIS BEFORE CONTINUING ====================
@@ -378,7 +378,7 @@ do
   -- Useful plugin to show you pending keybinds.
   vim.pack.add { gh 'folke/which-key.nvim' }
   require('which-key').setup {
-    -- Delay between pressing a key and opening which-key (milliseconds)
+    -- Delay between pressing a key an
     delay = 0,
     icons = { mappings = vim.g.have_nerd_font },
     -- Document existing key chains
@@ -866,6 +866,9 @@ do
   --
   -- vim.pack.add { gh 'rafamadriz/friendly-snippets' }
   -- require('luasnip.loaders.from_vscode').lazy_load()
+  vim.pack.add { gh 'rafamadriz/friendly-snippets' }
+  -- 2. Load all snippets from friendly-snippets into LuaSnip
+  require('luasnip.loaders.from_vscode').lazy_load()
 
   -- [[ Autocomplete Engine ]]
   vim.pack.add { { src = gh 'saghen/blink.cmp', version = vim.version.range '1.*' } }
@@ -893,6 +896,10 @@ do
       --
       -- See `:help blink-cmp-config-keymap` for defining your own keymap
       preset = 'default',
+      ['<CR>'] = { 'accept', 'fallback' },
+      ['<Tab>'] = { 'select_next', 'fallback' },
+      ['<S-Tab>'] = { 'select_prev', 'fallback' },
+      ['<C-Space>'] = { 'show', 'show_documentation', 'hide' },
 
       -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
       --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
@@ -1034,7 +1041,6 @@ do
   require 'custom.plugins.bufferline'
   require 'custom.plugins.numb'
   require 'custom.plugins.toggleterm'
-  require 'custom.plugins.snippets'
   require 'custom.plugins.whichkey'
 end
 
