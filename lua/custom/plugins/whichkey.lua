@@ -61,13 +61,4 @@ if ok then
   vim.api.nvim_set_hl(0, 'WhichKeyNormal', {
     bg = '#1d2021', -- deep gruvbox dark
   })
-
-  vim.api.nvim_set_hl(0, 'NormalFloat', {
-    bg = '#1d2021',
-  })
-
-  vim.api.nvim_set_hl(0, 'FloatBorder', {
-    fg = '#d79921',
-    bg = '#1d2021',
-  })
 end
