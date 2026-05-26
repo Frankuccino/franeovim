@@ -26,3 +26,15 @@ vim.keymap.set('n', '<leader>cd', '<cmd>cd %:p:h<CR>', {
 vim.keymap.set('n', '<leader>cD', '<cmd>lcd %:p:h<CR>', {
   desc = 'LCD to Current File Directory',
 })
+
+-- TAB SECTION
+-- Tab/Shift-Tab for indentation in INSERT and VISUAL mode only
+vim.keymap.set('i', '<Tab>', '<C-t>', { desc = 'Indent in insert mode' })
+vim.keymap.set('i', '<S-Tab>', '<C-d>', { desc = 'Unindent in insert mode' })
+
+-- Visual mode indentation (and stay in visual mode)
+vim.keymap.set('v', '<Tab>', '>gv', { desc = 'Indent in visual mode' })
+vim.keymap.set('v', '<S-Tab>', '<gv', { desc = 'Unindent in visual mode' })
+
+-- Normal mode Tab stays as buffer navigation
+-- (your existing <Tab> for BufferLineCycleNext still works)
