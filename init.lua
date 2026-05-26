@@ -23,7 +23,7 @@
 What is Kickstart?
 
   Kickstart.nvim is *not* a distribution.
-
+init
   Kickstart.nvim is a starting point for your own configuration.
     The goal is that you can read every line of code, top-to-bottom, understand
     what your configuration is doing, and modify it to suit your needs.
@@ -158,7 +158,6 @@ do
   vim.o.list = true
   vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
   vim.opt.fillchars = { vert = ' ', eob = ' ' }
-  vim.api.nvim_set_hl(0, 'WinSeparator', { fg = 'none', bg = 'none' })
 
   -- Use spaces instead of tabs.
   vim.opt.expandtab = true
@@ -397,18 +396,18 @@ do
   -- change the command under that to load whatever the name of that colorscheme is.
   --
   -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-  vim.pack.add { gh 'folke/tokyonight.nvim' }
-  ---@diagnostic disable-next-line: missing-fields
-  require('tokyonight').setup {
-    styles = {
-      comments = { italic = false }, -- Disable italics in comments
-    },
-  }
+  -- vim.pack.add { gh 'folke/tokyonight.nvim' }
+  --  ---@diagnostic disable-next-line: missing-fields
+  --  require('tokyonight').setup {
+  --    styles = {
+  --      comments = { italic = false }, -- Disable italics in comments
+  --    },
+  --  }
 
   -- Load the colorscheme here.
   -- Like many other themes, this one has different styles, and you could load
   -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-  vim.cmd.colorscheme 'tokyonight-night'
+  --  vim.cmd.colorscheme 'tokyonight-night'
 
   -- Highlight todo, notes, etc in comments
   vim.pack.add { gh 'folke/todo-comments.nvim' }
