@@ -3,55 +3,39 @@ vim.pack.add { gh 'akinsho/toggleterm.nvim' }
 local ok, toggleterm = pcall(require, 'toggleterm')
 if ok then
   toggleterm.setup {
-    -- Multiple terminal instances with different keybindings
-    open_mapping = [[<C-\>]], -- Ctrl+\ is easier to reach than Ctrl+t
+    -- ⚠️  open_mapping removed — we handle it manually below
+    --     so we can guard against NeoTree focus stealing layout
 
-    -- Terminal behavior
     size = function(term)
       if term.direction == 'horizontal' then
         return 15
       elseif term.direction == 'vertical' then
-        -- Only force the 40% boundary rule on your main primary panel (Terminal 1)
         if term.id == 1 then
           return math.floor(vim.o.columns * 0.4)
         else
-          -- For Terminal 2, 3, etc., let them automatically divide up
-          -- the space already allocated inside that 40% vertical sidebar container
           return nil
         end
       end
     end,
 
-    -- Start in insert mode
     start_in_insert = true,
-    insert_mappings = true, -- Apply open_mapping in insert mode
-    terminal_mappings = true, -- Apply open_mapping in terminal mode
-
-    -- Persist terminal size
+    insert_mappings = true,
+    terminal_mappings = true,
     persist_size = true,
-    persist_mode = true, -- Remember insert/normal mode
+    persist_mode = true,
+    direction = 'float',
 
-    -- Direction options
-    direction = 'float', -- 'vertical' | 'horizontal' | 'tab' | 'float'
-
-    -- Cleaner floating window
     float_opts = {
-      border = 'curved', -- 'single' | 'double' | 'shadow' | 'curved'
+      border = 'curved',
       width = math.floor(vim.o.columns * 0.9),
       height = math.floor(vim.o.lines * 0.85),
       winblend = 0,
     },
 
-    -- Auto-scroll to bottom on output
     auto_scroll = true,
-
-    -- Close terminal when process exits
     close_on_exit = true,
-
-    -- Shell configuration
     shell = vim.o.shell,
 
-    -- Better terminal colors
     highlights = {
       Normal = { link = 'Normal' },
       NormalFloat = { link = 'NormalFloat' },
@@ -59,8 +43,43 @@ if ok then
     },
   }
 
-  -- Keybindings for different terminal layouts
-  -- Replace the terminal layout keybindings with these:
+  -- ─── NeoTree-safe Ctrl+\ toggle ──────────────────────────────────────────
+  --
+  --  Problem: firing ToggleTerm while focused on NeoTree causes Neovim to
+  --  open/anchor the terminal *inside* NeoTree's window, which corrupts the
+  --  layout (vertical/horizontal splits resize weirdly, NeoTree pane breaks).
+  --
+  --  Fix: intercept Ctrl+\ in normal mode, check whether the current buffer
+  --  is a neo-tree buffer, and if so jump to the last real editor window
+  --  before delegating to ToggleTerm.  Terminal/insert modes pass through
+  --  unchanged (they can never be focused on NeoTree anyway).
+  --
+  local function safe_toggle()
+    if vim.bo.filetype == 'neo-tree' then
+      -- Try the previously-focused window first; fall back to the first
+      -- non-NeoTree, non-floating window in the layout.
+      vim.cmd 'wincmd p'
+      if vim.bo.filetype == 'neo-tree' then
+        -- wincmd p landed back on NeoTree (only window open?) – scan instead
+        for _, win in ipairs(vim.api.nvim_list_wins()) do
+          local buf = vim.api.nvim_win_get_buf(win)
+          local ft = vim.api.nvim_buf_get_option(buf, 'filetype')
+          local cfg = vim.api.nvim_win_get_config(win)
+          if ft ~= 'neo-tree' and cfg.relative == '' then
+            vim.api.nvim_set_current_win(win)
+            break
+          end
+        end
+      end
+    end
+    vim.cmd 'ToggleTerm'
+  end
+
+  vim.keymap.set('n', [[<C-\>]], safe_toggle, { desc = 'Terminal (safe)' })
+  vim.keymap.set('t', [[<C-\>]], [[<C-\><C-n><cmd>ToggleTerm<cr>]], { desc = 'Terminal toggle' })
+  -- ─────────────────────────────────────────────────────────────────────────
+
+  -- Layout shortcuts
   vim.keymap.set('n', '<leader>tF', '<cmd>ToggleTerm direction=float<cr>', { desc = 'Terminal Float' })
   vim.keymap.set('n', '<leader>tH', '<cmd>ToggleTerm direction=horizontal<cr>', { desc = 'Terminal Horizontal' })
   vim.keymap.set('n', '<leader>tV', '<cmd>ToggleTerm direction=vertical<cr>', { desc = 'Terminal Vertical' })
@@ -74,59 +93,43 @@ if ok then
     return max_id + 1
   end
 
-  -- 1. ➕ MULTI-SPLIT (<leader>ts): Spawns a brand-new sequential terminal split
   vim.keymap.set('n', '<leader>ts', function()
     local next_id = get_next_term_id()
     vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes([[<C-\><C-n>]], true, true, true), 'n', false)
-
-    -- Get current terminal's direction
     local current_term_id = vim.b.toggle_number
-    local current_direction = 'vertical' -- default
+    local current_direction = 'vertical'
     local size = 40
-
     if current_term_id then
-      local term_list = require('toggleterm.terminal').get_all()
-      for _, term in ipairs(term_list) do
+      for _, term in ipairs(require('toggleterm.terminal').get_all()) do
         if term.id == current_term_id then
           current_direction = term.direction
-          -- Use consistent size based on direction
           size = (current_direction == 'horizontal') and 15 or 40
           break
         end
       end
     end
-
-    -- Spawn new terminal in SAME direction with SAME size
     vim.cmd(next_id .. 'ToggleTerm direction=' .. current_direction .. ' size=' .. size)
   end, { desc = '[T]oggle [S]plit New Terminal' })
 
-  -- 2. ❌ CLOSE SPLIT (<leader>tw): Kills the specific active terminal split (Like Cmd+W)
   vim.keymap.set('n', '<leader>tw', function()
-    -- Grab the ID of the terminal you are currently typed into
     local current_id = vim.b.toggle_number
     if current_id then
-      -- Drop out of insert mode and forcefully shut down this specific ID instance
       vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes([[<C-\><C-n>]], true, true, true), 'n', false)
-      vim.cmd(string.format('%dToggleTerm', current_id)) -- Hides/closes it
-
-      -- Optional: Completely purges the terminal buffer from memory so it's a fresh kill
-      local term_list = require('toggleterm.terminal').get_all()
-      for _, term in ipairs(term_list) do
+      vim.cmd(string.format('%dToggleTerm', current_id))
+      for _, term in ipairs(require('toggleterm.terminal').get_all()) do
         if term.id == current_id then term:shutdown() end
       end
     end
   end, { desc = 'Kill Current Terminal Split' })
-  -- Easy escape from terminal mode
+
   vim.keymap.set('t', '<Esc><Esc>', [[<C-\><C-n>]], { desc = 'Exit terminal mode' })
   vim.keymap.set('t', '<C-h>', [[<Cmd>wincmd h<CR>]], { desc = 'Navigate left' })
   vim.keymap.set('t', '<C-j>', [[<Cmd>wincmd j<CR>]], { desc = 'Navigate down' })
   vim.keymap.set('t', '<C-k>', [[<Cmd>wincmd k<CR>]], { desc = 'Navigate up' })
   vim.keymap.set('t', '<C-l>', [[<Cmd>wincmd l<CR>]], { desc = 'Navigate right' })
 
-  -- Specialized terminals (lazy-loaded)
   local Terminal = require('toggleterm.terminal').Terminal
 
-  -- Lazygit integration
   local lazygit = Terminal:new {
     cmd = 'lazygit',
     direction = 'float',
@@ -138,27 +141,12 @@ if ok then
   }
   vim.keymap.set('n', '<leader>gg', function() lazygit:toggle() end, { desc = 'LazyGit' })
 
-  -- Python REPL
-  local python = Terminal:new {
-    cmd = 'python3',
-    direction = 'float',
-    hidden = true,
-  }
+  local python = Terminal:new { cmd = 'python3', direction = 'float', hidden = true }
   vim.keymap.set('n', '<leader>tp', function() python:toggle() end, { desc = 'Python REPL' })
 
-  -- Node REPL
-  local node = Terminal:new {
-    cmd = 'node',
-    direction = 'float',
-    hidden = true,
-  }
+  local node = Terminal:new { cmd = 'node', direction = 'float', hidden = true }
   vim.keymap.set('n', '<leader>tn', function() node:toggle() end, { desc = 'Node REPL' })
 
-  -- btop/htop system monitor
-  local htop = Terminal:new {
-    cmd = 'btop',
-    direction = 'float',
-    hidden = true,
-  }
+  local htop = Terminal:new { cmd = 'btop', direction = 'float', hidden = true }
   vim.keymap.set('n', '<leader>tm', function() htop:toggle() end, { desc = 'System Monitor' })
 end
