@@ -98,7 +98,7 @@ if ok then
 
     -- Spawn new terminal in SAME direction with SAME size
     vim.cmd(next_id .. 'ToggleTerm direction=' .. current_direction .. ' size=' .. size)
-  end, { desc = 'Split Terminal (Same Direction)' })
+  end, { desc = '[T]oggle [S]plit New Terminal' })
 
   -- 2. ❌ CLOSE SPLIT (<leader>tw): Kills the specific active terminal split (Like Cmd+W)
   vim.keymap.set('n', '<leader>tw', function()
