@@ -31,6 +31,8 @@ if ok then
     },
     highlights = {
       NeoTreeWinSeparator = { fg = 'none', bg = 'none' },
+      NeoTreeNormalFloat = { bg = '#1d2021', fg = '#ebdbb2' },
+      NeoTreeFloatBorder = { fg = '#d79921', bg = '#1d2021' },
     },
 
     filesystem = {
@@ -40,8 +42,6 @@ if ok then
       },
     },
   }
-
-  -- Neo-tree Gruvbox Floating Theme
 
   vim.keymap.set('n', '<leader>e', '<cmd>Neotree toggle<cr>', { desc = 'Toggle Neo-tree' })
 end
