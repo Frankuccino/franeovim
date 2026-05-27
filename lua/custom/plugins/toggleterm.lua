@@ -74,17 +74,34 @@ if ok then
     return max_id + 1
   end
 
-  -- 1. MULTI-SPLIT (<leader>ts): Spawns a brand-new sequential terminal split
-  vim.keymap.set('t', '<leader>ts', function()
+  -- 1. ➕ MULTI-SPLIT (<leader>ts): Spawns a brand-new sequential terminal split
+  vim.keymap.set('n', '<leader>ts', function()
     local next_id = get_next_term_id()
-    -- Safely drop out of terminal insert mode
     vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes([[<C-\><C-n>]], true, true, true), 'n', false)
-    -- Execute ToggleTerm using the new ID in a vertical layout
-    vim.cmd(string.format('%dToggleTerm direction=vertical', next_id))
-  end, { desc = 'Spawn Next Terminal Split Vertically' })
 
-  -- 2. CLOSE SPLIT (<leader>tw): Kills the specific active terminal split (Like Cmd+W)
-  vim.keymap.set('t', '<leader>tw', function()
+    -- Get current terminal's direction
+    local current_term_id = vim.b.toggle_number
+    local current_direction = 'vertical' -- default
+    local size = 40
+
+    if current_term_id then
+      local term_list = require('toggleterm.terminal').get_all()
+      for _, term in ipairs(term_list) do
+        if term.id == current_term_id then
+          current_direction = term.direction
+          -- Use consistent size based on direction
+          size = (current_direction == 'horizontal') and 15 or 40
+          break
+        end
+      end
+    end
+
+    -- Spawn new terminal in SAME direction with SAME size
+    vim.cmd(next_id .. 'ToggleTerm direction=' .. current_direction .. ' size=' .. size)
+  end, { desc = 'Split Terminal (Same Direction)' })
+
+  -- 2. ❌ CLOSE SPLIT (<leader>tw): Kills the specific active terminal split (Like Cmd+W)
+  vim.keymap.set('n', '<leader>tw', function()
     -- Grab the ID of the terminal you are currently typed into
     local current_id = vim.b.toggle_number
     if current_id then
