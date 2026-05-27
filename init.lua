@@ -162,14 +162,14 @@ do
   -- Use spaces instead of tabs.
   vim.opt.expandtab = true
 
-  -- Set indent size to 4
-  vim.opt.shiftwidth = 4
+  -- Set indent size
+  vim.opt.shiftwidth = 2
 
-  -- Set visual tab width to 4
-  vim.opt.tabstop = 4
+  -- Set visual tab width
+  vim.opt.tabstop = 2
 
-  -- Makes backspace behave 4 spaces
-  vim.opt.softtabstop = 4
+  -- Makes backspace behave spaces
+  vim.opt.softtabstop = 2
 
   -- Preview substitutions live, as you type!
   vim.o.inccommand = 'split'
