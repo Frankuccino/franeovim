@@ -19,12 +19,3 @@ vim.api.nvim_set_hl(0, 'WinSeparator', { fg = 'none', bg = 'none' })
 vim.api.nvim_set_hl(0, 'CursorLine', { bg = '#593e53' })
 vim.api.nvim_set_hl(0, 'TelescopeSelection', { bg = '#593e53', fg = '#fbf1c7' })
 vim.api.nvim_set_hl(0, 'TelescopeSelectionCaret', { fg = '#eb5ba3', bg = '#2d252b' })
-
-vim.api.nvim_set_hl(0, 'NormalFloat', {
-  bg = '#1d2021',
-})
-
-vim.api.nvim_set_hl(0, 'FloatBorder', {
-  fg = '#d79921',
-  bg = '#1d2021',
-})
