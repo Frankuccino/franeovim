@@ -15,5 +15,12 @@ vim.pack.add {
   gh 'sindrets/diffview.nvim',
 }
 
-vim.keymap.set('n', '<leader>gd', '<cmd>DiffviewOpen<cr>', { desc = 'Diff view' })
 vim.keymap.set('n', '<leader>gh', '<cmd>DiffviewFileHistory %<cr>', { desc = 'File history' })
+
+vim.keymap.set('n', '<leader>gd', function()
+  if next(require('diffview.lib').views) == nil then
+    vim.cmd 'DiffviewOpen'
+  else
+    vim.cmd 'DiffviewClose'
+  end
+end, { desc = 'Toggle Diff view' })
