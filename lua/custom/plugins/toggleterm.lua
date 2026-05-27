@@ -11,7 +11,14 @@ if ok then
       if term.direction == 'horizontal' then
         return 15
       elseif term.direction == 'vertical' then
-        return vim.o.columns * 0.4
+        -- Only force the 40% boundary rule on your main primary panel (Terminal 1)
+        if term.id == 1 then
+          return math.floor(vim.o.columns * 0.4)
+        else
+          -- For Terminal 2, 3, etc., let them automatically divide up
+          -- the space already allocated inside that 40% vertical sidebar container
+          return nil
+        end
       end
     end,
 
@@ -58,6 +65,40 @@ if ok then
   vim.keymap.set('n', '<leader>tH', '<cmd>ToggleTerm direction=horizontal<cr>', { desc = 'Terminal Horizontal' })
   vim.keymap.set('n', '<leader>tV', '<cmd>ToggleTerm direction=vertical<cr>', { desc = 'Terminal Vertical' })
 
+  local function get_next_term_id()
+    local terminal_list = require('toggleterm.terminal').get_all()
+    local max_id = 0
+    for _, term in ipairs(terminal_list) do
+      if term.id > max_id then max_id = term.id end
+    end
+    return max_id + 1
+  end
+
+  -- 1. MULTI-SPLIT (<leader>ts): Spawns a brand-new sequential terminal split
+  vim.keymap.set('t', '<leader>ts', function()
+    local next_id = get_next_term_id()
+    -- Safely drop out of terminal insert mode
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes([[<C-\><C-n>]], true, true, true), 'n', false)
+    -- Execute ToggleTerm using the new ID in a vertical layout
+    vim.cmd(string.format('%dToggleTerm direction=vertical', next_id))
+  end, { desc = 'Spawn Next Terminal Split Vertically' })
+
+  -- 2. CLOSE SPLIT (<leader>tw): Kills the specific active terminal split (Like Cmd+W)
+  vim.keymap.set('t', '<leader>tw', function()
+    -- Grab the ID of the terminal you are currently typed into
+    local current_id = vim.b.toggle_number
+    if current_id then
+      -- Drop out of insert mode and forcefully shut down this specific ID instance
+      vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes([[<C-\><C-n>]], true, true, true), 'n', false)
+      vim.cmd(string.format('%dToggleTerm', current_id)) -- Hides/closes it
+
+      -- Optional: Completely purges the terminal buffer from memory so it's a fresh kill
+      local term_list = require('toggleterm.terminal').get_all()
+      for _, term in ipairs(term_list) do
+        if term.id == current_id then term:shutdown() end
+      end
+    end
+  end, { desc = 'Kill Current Terminal Split' })
   -- Easy escape from terminal mode
   vim.keymap.set('t', '<Esc><Esc>', [[<C-\><C-n>]], { desc = 'Exit terminal mode' })
   vim.keymap.set('t', '<C-h>', [[<Cmd>wincmd h<CR>]], { desc = 'Navigate left' })
@@ -102,5 +143,5 @@ if ok then
     direction = 'float',
     hidden = true,
   }
-  vim.keymap.set('n', '<leader>tt', function() htop:toggle() end, { desc = 'System Monitor' })
+  vim.keymap.set('n', '<leader>tm', function() htop:toggle() end, { desc = 'System Monitor' })
 end
