@@ -12,11 +12,6 @@ vim.keymap.set('n', '<leader>fw', ':%s/\\<<C-r><C-w>\\>//gI<Left><Left><Left>', 
 -- Find and replace in visual selection
 vim.keymap.set('v', '<leader>fr', ':s//g<Left><Left>', { desc = 'Find & Replace in selection' })
 
--- RENAME SECTION
-
--- To Rename Variables
-vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, { desc = 'LSP Rename' })
-
 -- Change cwd to current file's directory
 vim.keymap.set('n', '<leader>cd', '<cmd>cd %:p:h<CR>', {
   desc = 'CD to Current File Directory',
@@ -38,3 +33,30 @@ vim.keymap.set('v', '<S-Tab>', '<gv', { desc = 'Unindent in visual mode' })
 
 -- Normal mode Tab stays as buffer navigation
 -- (your existing <Tab> for BufferLineCycleNext still works)
+--
+
+-- Diagnostic navigation
+vim.keymap.set('n', ']d', function() vim.diagnostic.jump { count = 1 } end, { desc = 'Next diagnostic' })
+vim.keymap.set('n', '[d', function() vim.diagnostic.jump { count = -1 } end, { desc = 'Prev diagnostic' })
+
+-- Quickfix navigation
+vim.keymap.set('n', ']q', '<cmd>cnext<CR>', { desc = 'Next quickfix' })
+vim.keymap.set('n', '[q', '<cmd>cprev<CR>', { desc = 'Prev quickfix' })
+
+-- Save
+vim.keymap.set({ 'n', 'i' }, '<C-s>', '<cmd>w<CR>', { desc = 'Save file' })
+
+-- Copy file path
+vim.keymap.set('n', '<leader>cp', '<cmd>let @+ = expand("%")<CR>', { desc = 'Copy relative path' })
+vim.keymap.set('n', '<leader>cP', '<cmd>let @+ = expand("%:p")<CR>', { desc = 'Copy absolute path' })
+
+-- Toggle between source and test file
+vim.keymap.set('n', '<leader>ta', function()
+  local file = vim.fn.expand '%'
+  if file:match '%.test%.' or file:match '%.spec%.' then
+    vim.cmd('e ' .. file:gsub('%.test%.', '.'):gsub('%.spec%.', '.'))
+  else
+    local ext = file:match '%.(%a+)$'
+    vim.cmd('e ' .. file:gsub('%.' .. ext .. '$', '.test.' .. ext))
+  end
+end, { desc = 'Toggle test file' })
