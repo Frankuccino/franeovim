@@ -413,6 +413,13 @@ do
   vim.pack.add { gh 'folke/todo-comments.nvim' }
   require('todo-comments').setup { signs = false }
 
+  vim.cmd 'filetype plugin on'
+  -- Toggle comment in Normal Mode
+  vim.keymap.set('n', '<C-/>', 'gcc', { remap = true, desc = 'Toggle Comment' })
+
+  -- Toggle comment in Visual Mode
+  vim.keymap.set('v', '<C-/>', 'gc', { remap = true, desc = 'Toggle Comment' })
+
   -- [[ mini.nvim ]]
   --  A collection of various small independent plugins/modules
   vim.pack.add { gh 'nvim-mini/mini.nvim' }
@@ -713,6 +720,12 @@ do
           callback = function(event2)
             vim.lsp.buf.clear_references()
             vim.api.nvim_clear_autocmds { group = 'kickstart-lsp-highlight', buffer = event2.buf }
+            -- stop setver when last buffer detaches.
+            local lsp_client = vim.lsp.get_client_by_id(event2.data.client_id)
+            if not lsp_client then return end
+
+            -- vim.tbl_isempty safely checks if the dictionary is empty
+            if vim.tbl_isempty(lsp_client.attached_buffers) then lsp_client:stop() end
           end,
         })
       end
@@ -790,6 +803,9 @@ do
   -- Automatically install LSPs and related tools to stdpath for Neovim
   require('mason').setup {}
 
+  require('mason-lspconfig').setup {
+    automatic_installation = false,
+  }
   -- Ensure the servers and tools above are installed
   --
   -- To check the current status of installed tools and/or manually install
