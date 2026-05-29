@@ -63,7 +63,8 @@ if ok then
         -- wincmd p landed back on NeoTree (only window open?) – scan instead
         for _, win in ipairs(vim.api.nvim_list_wins()) do
           local buf = vim.api.nvim_win_get_buf(win)
-          local ft = vim.api.nvim_buf_get_option(buf, 'filetype')
+          -- Updated deprecated nvim_buf_get_option
+          local ft = vim.api.nvim_get_option_value('filetype', { buf = buf })
           local cfg = vim.api.nvim_win_get_config(win)
           if ft ~= 'neo-tree' and cfg.relative == '' then
             vim.api.nvim_set_current_win(win)
