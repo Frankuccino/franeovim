@@ -15,16 +15,6 @@ require('ufo').setup {
   provider_selector = function() return { 'treesitter', 'indent' } end,
 }
 
-vim.pack.add { gh 'smjonas/inc-rename.nvim' }
-
--- Wrap in a safe call so it won't crash while downloading on first boot
-local ok, increname = pcall(require, 'inc-rename')
-if ok then
-  increname.setup()
-
-  vim.keymap.set('n', '<leader>rn', function() return ':IncRename ' .. vim.fn.expand '<cword>' end, { expr = true, desc = 'Incremental rename' })
-end
-
 -- ==========================================
 -- Autocomplete & Auto-closing Tags Setup
 -- ==========================================

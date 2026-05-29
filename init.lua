@@ -687,7 +687,8 @@ do
       -- Rename the variable under your cursor.
       --  Most Language Servers support renaming across files, etc.
       -- NOTE: I commented this out as I do have IncRename in my code.lua, which is better.
-      --  map('grn', vim.lsp.buf.rename, '[R]e[n]ame')
+      map('grn', vim.lsp.buf.rename, '[R]e[n]ame')
+      -- I uncommented it as I realized it's built in.
 
       -- Execute a code action, usually your cursor needs to be on top of an error
       -- or a suggestion from your LSP for this to activate.
