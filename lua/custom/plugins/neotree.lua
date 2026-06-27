@@ -1,16 +1,21 @@
--- local function gh(repo) return 'https://github.com/' .. repo end
 -- File Explorer (Completely explicit list)
 vim.pack.add {
   'https://github.com/nvim-lua/plenary.nvim',
   'https://github.com/nvim-tree/nvim-web-devicons',
   'https://github.com/MunifTanjim/nui.nvim',
   'https://github.com/nvim-neo-tree/neo-tree.nvim',
+  'https://github.com/antosha417/nvim-lsp-file-operations',
 }
+require('lsp-file-operations').setup {
+  timeout_ms = 1000,
+}
+-- Suppress deprecated lsp-file-operations warning
+vim.lsp.get_active_clients = vim.lsp.get_clients
 
 -- Safe wrapper to prevent crashing during the background git clone
 local ok, neotree = pcall(require, 'neo-tree')
 if ok then
-  require('neo-tree').setup {
+  neotree.setup {
     sync_root_with_cwd = true,
     respect_buf_cwd = true,
 
@@ -18,7 +23,7 @@ if ok then
       position = 'float',
       popup = {
         border = 'rounded',
-        win_options = { winblend = 10 },
+
         position = {
           col = 0,
           row = '100%',
@@ -29,17 +34,13 @@ if ok then
         },
       },
     },
-    highlights = {
-      NeoTreeWinSeparator = { fg = 'none', bg = 'none' },
-      NeoTreeNormalFloat = { bg = '#1d2021', fg = '#ebdbb2' },
-      NeoTreeFloatBorder = { fg = '#d79921', bg = '#1d2021' },
-    },
 
     filesystem = {
       bind_to_cwd = true,
       follow_current_file = {
         enabled = true,
       },
+      use_libuv_file_watcher = true,
     },
   }
 

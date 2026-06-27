@@ -68,12 +68,6 @@ if ok_bufferline then
         return true
       end,
     },
-
-    highlights = {
-      fill = {
-        bg = '#1e1e2e', -- Adjust to match your colorscheme
-      },
-    },
   }
 
   local map = vim.keymap.set

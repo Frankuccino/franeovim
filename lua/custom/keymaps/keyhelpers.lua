@@ -57,6 +57,8 @@ vim.keymap.set('n', '<leader>ta', function()
     vim.cmd('e ' .. file:gsub('%.test%.', '.'):gsub('%.spec%.', '.'))
   else
     local ext = file:match '%.(%a+)$'
-    vim.cmd('e ' .. file:gsub('%.' .. ext .. '$', '.test.' .. ext))
+    vim.cmd('e' .. file:gsub('%.' .. ext .. '$', '.test.' .. ext))
   end
 end, { desc = 'Toggle test file' })
+
+vim.keymap.set('n', '<leader>wa', '<cmd>wa<CR>', { desc = 'Save all buffers' })

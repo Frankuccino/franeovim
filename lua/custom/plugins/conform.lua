@@ -3,6 +3,7 @@ local conform = require 'conform'
 conform.setup {
   formatters_by_ft = {
     lua = { 'stlua' },
+    luau = { 'stylua' },
     html = { 'prettier' },
     css = { 'prettier' },
     rust = { 'rustfmt' },

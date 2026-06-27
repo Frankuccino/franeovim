@@ -36,11 +36,11 @@ if ok then
     close_on_exit = true,
     shell = vim.o.shell,
 
-    highlights = {
-      Normal = { link = 'Normal' },
-      NormalFloat = { link = 'NormalFloat' },
-      FloatBorder = { link = 'FloatBorder' },
-    },
+    -- highlights = {
+    --   Normal = { link = 'Normal' },
+    --   NormalFloat = { link = 'NormalFloat' },
+    --   FloatBorder = { link = 'FloatBorder' },
+    -- },
   }
 
   -- ─── NeoTree-safe Ctrl+\ toggle ──────────────────────────────────────────
