@@ -809,9 +809,7 @@ do
   }
 
   -- Automatically install LSPs and related tools to stdpath for Neovim
-  require('mason').setup {
-    PATH = 'prepend', --This ensures Mason's bin is at the front of yout PATH
-  }
+  require('mason').setup {}
 
   require('mason-lspconfig').setup {
     automatic_installation = false,
@@ -826,6 +824,27 @@ do
   local ensure_installed = vim.tbl_keys(servers or {})
   vim.list_extend(ensure_installed, {
     -- You can add other tools here that you want Mason to install
+    -- Go
+    'gopls',
+    'delve',
+    'golangci-lint',
+    'gomodifytags',
+    'gotests',
+    'impl',
+    -- Rust
+    'rust-analyzer',
+    'codelldb',
+    'bacon',
+    -- Web
+    'vtsls',
+    'html-lsp',
+    'css-lsp',
+    'tailwindcss',
+    'emmet-ls',
+    'prettier',
+    -- Lua
+    'lua-language-server',
+    'stylua',
   })
 
   require('mason-tool-installer').setup { ensure_installed = ensure_installed }
